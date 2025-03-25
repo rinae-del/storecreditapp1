@@ -20,7 +20,7 @@ jobs:
       - name: Set up Ruby (required for Fastlane or using altool)
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+           ruby-version: '3.0'
 
       - name: Install dependencies
         run: |
