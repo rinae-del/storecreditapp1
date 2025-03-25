@@ -30,6 +30,3 @@ jobs:
       - name: Upload to TestFlight
         run: |
           xcrun altool --upload-app -f app-v1.ipa -u "jaco@squareflo.com" -p "Erin12345!!"
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
