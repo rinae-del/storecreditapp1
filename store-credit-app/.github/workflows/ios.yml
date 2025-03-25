@@ -1,17 +1,34 @@
-name: Build iOS App
+name: ios
+
 on:
   push:
     branches:
-      - main
+      - main  # Change this if you want it to trigger on a different branch
+  pull_request:
+    branches:
+      - main  # Change this if you want it to trigger on pull requests
+
 jobs:
-  build:
-    runs-on: macos-latest
+  upload_to_testflight:
+    runs-on: macos-latest  # Use macOS runner for uploading to TestFlight
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Checkout your repository so we can access the files
+
+      - name: Set up Ruby (required for Fastlane or using altool)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+
       - name: Install dependencies
         run: |
-          cd ios
-          pod install
-      - name: Build app
-        run: xcodebuild -workspace ios/YourApp.xcworkspace -scheme YourApp -sdk iphoneos -configuration Release
+          gem install fastlane  # Optional: Install fastlane if you need it
+          brew install cocoapods  # Optional: If you use CocoaPods
+
+      - name: Upload to TestFlight
+        run: |
+          xcrun altool --upload-app -f app.ipa -u ${{ secrets.APPLE_ID }} -p ${{ secrets.APPLE_PASSWORD }}
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
